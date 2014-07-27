@@ -43,5 +43,15 @@ loadActivitiesAsFactor <- function(filename) {
     factorized
 }
 
+loadSetAndBind <- function(base_name) {
+    # load features, activity, and subject ID from a set (train/test)
+    # return a merged date.frame of all data
+    base_path <- paste(base_name, '/', sep='')
+    features <- loadSelectedFeatures(paste(base_path, 'X_test.txt', sep=''))
+    activity <- loadActivitiesAsFactor(paste(base_path, 'y_test.txt', sep=''))
+    all <- cbind(activity, features)
+    all
+}
+
 
 
