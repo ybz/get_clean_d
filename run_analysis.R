@@ -16,12 +16,19 @@ shouldPickColumn <- function(name) {
     grepl('mean()', name, fixed=TRUE) | grepl('std()', name, fixed=TRUE)
 }
 
+fixNames <- function(names_vector) {
+    ret <- gsub('-', '.', names_vector)
+    ret <- gsub('()', '', ret, fixed=TRUE)
+    ret
+}
+
 loadSelectedFeatures <- function(filename) {
     # load measurement data from file
     # fix column names, and select only columns of mean and std
     data <- loadFeatures('filename')
     names(data) <- loadFeatureNames()
     selected_columns <- data[,shouldPickColumn(names(data))]
+    names(selected_columns) <- fixNames(names(selected_columns))
     selected_columns
 }
 
