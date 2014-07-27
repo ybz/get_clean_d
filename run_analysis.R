@@ -74,5 +74,16 @@ loadAllData <- function() {
     all <- rbind(test_data, train_data)
 }
 
+getAverageForData <- function(data) {
+    avg_data <- aggregate(data[,!colnames(data) %in% c('subject_id', 'activity')],by=list(subject_id=data$subject_id, activity=data$activity), FUN=mean)
+    avg_data
+}
+
+loadTidyData <- function() {
+    all <- loadAllData()
+    tidy <- getAverageForData(all)
+    tidy
+}
 
 
+tidy <- loadTidyData()
