@@ -24,3 +24,24 @@ loadSelectedFeatures <- function(filename) {
     selected_columns <- data[,shouldPickColumn(names(data))]
     selected_columns
 }
+
+getActivitiesVector <- function() {
+    # load activities definition and return it as a lowercase vector
+    activities <- read.table('./activity_labels.txt', header=FALSE, sep="", stringsAsFactors=FALSE)
+    labels <- tolower(activities[[2]])
+    labels
+}
+
+asActivitiesFactor <- function(int_vector) {
+    factorized <- factor(int_vector, labels=getActivitiesVector())
+}
+
+loadActivitiesAsFactor <- function(filename) {
+    # load activities data file, and replace integer values with a labels factor
+    activities_int_vector <- read.table(filename, header=FALSE, sep="", stringsAsFactors=FALSE)[[1]]
+    factorized <- asActivitiesFactor(activities_int_vector)
+    factorized
+}
+
+
+
