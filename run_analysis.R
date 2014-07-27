@@ -1,6 +1,6 @@
 loadFeatures <- function(filename) {
     # load full features data from filename
-    data <- read.table('./test/X_test.txt', header=FALSE, sep="")
+    data <- read.table(filename, header=FALSE, sep="")
     data
 }
 
@@ -25,7 +25,7 @@ fixNames <- function(names_vector) {
 loadSelectedFeatures <- function(filename) {
     # load measurement data from file
     # fix column names, and select only columns of mean and std
-    data <- loadFeatures('filename')
+    data <- loadFeatures(filename)
     names(data) <- loadFeatureNames()
     selected_columns <- data[,shouldPickColumn(names(data))]
     names(selected_columns) <- fixNames(names(selected_columns))
@@ -59,12 +59,19 @@ loadSetAndBind <- function(base_name) {
     # load features, activity, and subject ID from a set (train/test)
     # return a merged date.frame of all data
     base_path <- paste(base_name, '/', sep='')
-    features <- loadSelectedFeatures(paste(base_path, 'X_test.txt', sep=''))
-    activity <- loadActivitiesAsFactor(paste(base_path, 'y_test.txt', sep=''))
-    subject_id <- loadSubjectIDs(paste(base_path, 'subject_test.txt', sep=''))
+    features <- loadSelectedFeatures(paste(base_path, 'X_', base_name, '.txt', sep=''))
+    activity <- loadActivitiesAsFactor(paste(base_path, 'y_', base_name, '.txt', sep=''))
+    subject_id <- loadSubjectIDs(paste(base_path, 'subject_', base_name, '.txt', sep=''))
     all <- cbind(activity, features)
     all <- cbind(subject_id, all)
     all
+}
+
+loadAllData <- function() {
+    # load train and test data and merge them together
+    test_data <- loadSetAndBind('test')
+    train_data <- loadSetAndBind('train')
+    all <- rbind(test_data, train_data)
 }
 
 
